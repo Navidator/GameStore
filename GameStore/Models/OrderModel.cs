@@ -1,21 +1,26 @@
-﻿using GameStore.Enums;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GameStore.Models
 {
     public class OrderModel
     {
-        public int Id { get; set; }
+        [Key]
+        public int OrderId { get; set; }
 
+        [ForeignKey("UserModel")]
         public int UserId { get; set; }
 
-        public List<int> GameId { get; set; }
+        public List<int> GameId { get; set; }  //To be refactored if needed
 
         public double TotalPrice { get; set; }
 
-        public string Currency { get; set; }
+        [ForeignKey("CurrencyModel")]
+        public int CurrencyId { get; set; }
 
-        public PaymentType PaymentType { get; set; }
+        [ForeignKey("PaymentTypeModel")]
+        public int PaymentTypeId { get; set; }
 
         public string OrderComment { get; set; }
     }
