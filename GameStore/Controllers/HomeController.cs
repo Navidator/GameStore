@@ -7,6 +7,7 @@ namespace GameStore.Controllers
         public IActionResult Index()
         {
             return View();
+
         }
     }
 }
