@@ -14,11 +14,13 @@ namespace GameStore.Models
         public string Description { get; set; }
         [Required]
         public double Price { get; set; }
+        [Required]
         public DateTime ReleaseDate { get; set; }
+        [Required]
         public string GameDeveloper { get; set; }
 
-        public string Publisher { get; set; }
+        public string ImageUrl { get; set; }
 
-        //public List Genre
+        public string Publisher { get; set; }
     }
 }

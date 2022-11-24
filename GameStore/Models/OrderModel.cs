@@ -12,9 +12,13 @@ namespace GameStore.Models
         [ForeignKey("UserModel")]
         public int UserId { get; set; }
 
-        public List<int> GameId { get; set; }  //To be refactored if needed
+        [ForeignKey("GameModel")]
+        public int GameId { get; set; }
 
-        public double TotalPrice { get; set; }
+        [ForeignKey("OrderedGamesModel")]
+        public int ParentOrderId { get; set; }
+
+        //public double Price { get; set; }
 
         [ForeignKey("CurrencyModel")]
         public int CurrencyId { get; set; }
