@@ -5,6 +5,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20221123115713_InitialMigration.cs" />
+    <Compile Remove="Migrations\20221123115713_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20221123120316_InitialMigration.cs" />
+    <Compile Remove="Migrations\20221123120316_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20221123120719_InitialMigration.cs" />
+    <Compile Remove="Migrations\20221123120719_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20221123121436_InitialMigration.cs" />
+    <Compile Remove="Migrations\20221123121436_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20221123121612_InitialMigration.cs" />
+    <Compile Remove="Migrations\20221123121612_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20221123121907_SecondMigration.cs" />
+    <Compile Remove="Migrations\20221123121907_SecondMigration.Designer.cs" />
+    <Compile Remove="Migrations\20221123122539_InitialMigration.cs" />
+    <Compile Remove="Migrations\20221123122539_InitialMigration.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.31" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.31">
       <PrivateAssets>all</PrivateAssets>
@@ -14,7 +31,6 @@
 
   <ItemGroup>
     <Folder Include="Repository\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
 
