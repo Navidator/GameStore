@@ -20,7 +20,7 @@ namespace GameStore.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> index()
+        public async Task<IActionResult> Index()
         {
             return new OkObjectResult(await _gameService.GetAllGames()); 
         }
