@@ -95,6 +95,24 @@ namespace GameStore.Migrations
                     b.ToTable("Games");
                 });
 
+            modelBuilder.Entity("GameStore.Models.GamesAndGenresModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GenreId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GamesAndGenres");
+                });
+
             modelBuilder.Entity("GameStore.Models.GenderModel", b =>
                 {
                     b.Property<int>("GenderId")
@@ -120,10 +138,12 @@ namespace GameStore.Migrations
                     b.Property<string>("GenreName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ParentId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
 
                     b.HasKey("GenreId");
+
+                    b.HasIndex("ParentId");
 
                     b.ToTable("Genres");
                 });
@@ -248,6 +268,14 @@ namespace GameStore.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("GameStore.Models.GenreModel", b =>
+                {
+                    b.HasOne("GameStore.Models.GenreModel", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

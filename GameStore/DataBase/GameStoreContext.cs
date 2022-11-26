@@ -19,5 +19,14 @@ namespace GameStore.DataBase
         public DbSet<PaymentTypeModel> PaymentTypes { get; set; }
         public DbSet<RoleModel> Roles { get; set; }
         public DbSet<UserModel> Users { get; set; }
+        public DbSet<GamesAndGenresModel> GamesAndGenres { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<GenreModel>()
+                .HasMany(e => e.Children)
+                .WithOne(e => e.Parent)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
     }
 }

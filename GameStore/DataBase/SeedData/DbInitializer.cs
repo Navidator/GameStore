@@ -41,7 +41,25 @@ namespace GameStore.DataBase.SeedData
             }
             context.SaveChanges();
 
+            var genres = new GenreModel[]
+            {
+            new GenreModel{GenreName="Strategy", },
+            new GenreModel{GenreName="Shooter"},
+            new GenreModel{GenreName="FPS", ParentId=2},
+            new GenreModel{GenreName="TPS", ParentId=2},
+            new GenreModel{GenreName="Action"},
+            new GenreModel{GenreName="Arcade"},
+            new GenreModel{GenreName="Simulation"},
+            new GenreModel{GenreName="Puzzle"},
+            new GenreModel{GenreName="SinglePlayer"},
+            new GenreModel{GenreName="Multiplayer"}
+            };
+            foreach (GenreModel c in genres)
+            {
+                context.Genres.Add(c);
+            }
 
+            context.SaveChanges();
 
 
             var users = new UserModel[]

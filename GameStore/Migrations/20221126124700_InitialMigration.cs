@@ -56,6 +56,20 @@ namespace GameStore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GamesAndGenres",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GameId = table.Column<int>(nullable: false),
+                    GenreId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GamesAndGenres", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Gender",
                 columns: table => new
                 {
@@ -75,11 +89,17 @@ namespace GameStore.Migrations
                     GenreId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     GenreName = table.Column<string>(nullable: true),
-                    ParentId = table.Column<string>(nullable: true)
+                    ParentId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Genres", x => x.GenreId);
+                    table.ForeignKey(
+                        name: "FK_Genres_Genres_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "Genres",
+                        principalColumn: "GenreId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -160,6 +180,11 @@ namespace GameStore.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.UserId);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Genres_ParentId",
+                table: "Genres",
+                column: "ParentId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -172,6 +197,9 @@ namespace GameStore.Migrations
 
             migrationBuilder.DropTable(
                 name: "Games");
+
+            migrationBuilder.DropTable(
+                name: "GamesAndGenres");
 
             migrationBuilder.DropTable(
                 name: "Gender");
