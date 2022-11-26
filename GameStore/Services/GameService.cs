@@ -1,4 +1,5 @@
-﻿using GameStore.DataBase;
+﻿using GameStore.CustomExceptions;
+using GameStore.DataBase;
 using GameStore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -51,6 +52,18 @@ namespace GameStore.Services
             await _context.SaveChangesAsync();
 
             return gameToUpdate;
+        }
+
+        public async Task<GameModel> DeleteGame(int id)
+        {
+            GameModel gameToDelete = await _context.Games.Where(game => game.GameId == id).FirstOrDefaultAsync();
+            if (gameToDelete == null)
+            {
+                throw new DoesNotExistException("Selected ame Could not be found");
+            }
+            await _context.SaveChangesAsync();
+
+            return gameToDelete;
         }
     }
 }
