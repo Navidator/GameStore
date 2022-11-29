@@ -15,6 +15,6 @@ namespace GameStore.Models
 
         public GenreModel Parent { get; set; }
 
-        public ICollection<GenreModel> Children { get; } = new List<GenreModel>();
+        public ICollection<GenreModel> Children { get; set; } = new List<GenreModel>();
     }
 }

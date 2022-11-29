@@ -42,7 +42,7 @@ namespace GameStore.Controllers
             {
                 return new OkObjectResult(await _gameService.AddGame(newGame));
             }
-            catch (AlreadyExistEsception e)
+            catch (AlreadyExistException e)
             {
                 return BadRequest(e.Message);
             }   

@@ -1,5 +1,6 @@
 ﻿using GameStore.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace GameStore.DataBase.SeedData
@@ -43,10 +44,11 @@ namespace GameStore.DataBase.SeedData
 
             var genres = new GenreModel[]
             {
-            new GenreModel{GenreName="Strategy", },
-            new GenreModel{GenreName="Shooter"},
-            new GenreModel{GenreName="FPS", ParentId=2},
-            new GenreModel{GenreName="TPS", ParentId=2},
+            new GenreModel{GenreName="Strategy"},
+            new GenreModel{GenreName="Shooter", Children = new List<GenreModel>
+            { new GenreModel{GenreName="FPS"}, 
+              new GenreModel{GenreName="TPS"}
+            }},
             new GenreModel{GenreName="Action"},
             new GenreModel{GenreName="Arcade"},
             new GenreModel{GenreName="Simulation"},
