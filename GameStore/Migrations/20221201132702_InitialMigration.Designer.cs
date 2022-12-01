@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameStore.Migrations
 {
     [DbContext(typeof(GameStoreContext))]
-    [Migration("20221126124700_InitialMigration")]
+    [Migration("20221201132702_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -111,6 +111,10 @@ namespace GameStore.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("GenreId");
 
                     b.ToTable("GamesAndGenres");
                 });
@@ -270,6 +274,21 @@ namespace GameStore.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("GameStore.Models.GamesAndGenresModel", b =>
+                {
+                    b.HasOne("GameStore.Models.GameModel", "Game")
+                        .WithMany("GameAndGenre")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GameStore.Models.GenreModel", "Genre")
+                        .WithMany("GameAndGenre")
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GameStore.Models.GenreModel", b =>

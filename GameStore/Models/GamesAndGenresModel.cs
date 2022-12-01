@@ -11,7 +11,11 @@ namespace GameStore.Models
         [ForeignKey("GameModel")]
         public int GameId { get; set; }
 
+        public GameModel Game { get; set; }
+
         [ForeignKey("GenreModel")]
         public int GenreId { get; set; }
+
+        public GenreModel Genre { get; set; }
     }
 }

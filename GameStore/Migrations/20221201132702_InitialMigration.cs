@@ -56,20 +56,6 @@ namespace GameStore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GamesAndGenres",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    GameId = table.Column<int>(nullable: false),
-                    GenreId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GamesAndGenres", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Gender",
                 columns: table => new
                 {
@@ -181,6 +167,42 @@ namespace GameStore.Migrations
                     table.PrimaryKey("PK_Users", x => x.UserId);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "GamesAndGenres",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GameId = table.Column<int>(nullable: false),
+                    GenreId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GamesAndGenres", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GamesAndGenres_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
+                        principalColumn: "GameId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GamesAndGenres_Genres_GenreId",
+                        column: x => x.GenreId,
+                        principalTable: "Genres",
+                        principalColumn: "GenreId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GamesAndGenres_GameId",
+                table: "GamesAndGenres",
+                column: "GameId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GamesAndGenres_GenreId",
+                table: "GamesAndGenres",
+                column: "GenreId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Genres_ParentId",
                 table: "Genres",
@@ -196,16 +218,10 @@ namespace GameStore.Migrations
                 name: "Currency");
 
             migrationBuilder.DropTable(
-                name: "Games");
-
-            migrationBuilder.DropTable(
                 name: "GamesAndGenres");
 
             migrationBuilder.DropTable(
                 name: "Gender");
-
-            migrationBuilder.DropTable(
-                name: "Genres");
 
             migrationBuilder.DropTable(
                 name: "OrderedGames");
@@ -221,6 +237,12 @@ namespace GameStore.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Games");
+
+            migrationBuilder.DropTable(
+                name: "Genres");
         }
     }
 }

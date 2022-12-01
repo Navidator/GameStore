@@ -1,7 +1,6 @@
 ﻿using GameStore.CustomExceptions;
 using GameStore.DataBase;
 using GameStore.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +21,9 @@ namespace GameStore.Services
             return await _context.Games.ToListAsync();
         }
 
-        public Task<GameModel> GetGameById(int id)
+        public async Task<GameModel> GetGameById(int id)
         {
-            return _context.Games.Where(games => games.GameId == id).FirstOrDefaultAsync();
+            return await _context.Games.Where(games => games.GameId == id).FirstOrDefaultAsync();
         }
 
         public async Task<GameModel> AddGame(GameModel newGame)
@@ -48,6 +47,29 @@ namespace GameStore.Services
                 gameToUpdate.Price = editedGame.Price;
                 gameToUpdate.ReleaseDate = editedGame.ReleaseDate;
                 gameToUpdate.ImageUrl = editedGame.ImageUrl;
+            }
+            await _context.SaveChangesAsync();
+
+            return gameToUpdate;
+        }
+
+        public async Task<GameModel> AddCategoriesToGame(List<int> categoryIds___, int id)
+        {
+            List<int> categoryIds = new List<int>() { 2, 3, 5, 7, 8, 9, 10 }; //es gasasworebelia
+
+            var gameToUpdate = await _context.Games.Where(game => game.GameId == id).FirstOrDefaultAsync();
+            //var categoriesToAdd = new List<GamesAndGenresModel>();
+
+            if (gameToUpdate != null)
+            {
+                foreach (var categoryId in categoryIds)
+                {
+                    var genre = await _context.Genres.FirstOrDefaultAsync(genre => genre.GenreId == categoryId);
+
+                    //var x = new List<GamesAndGenresModel>() { new GamesAndGenresModel{ Genre = genre} };
+
+                    gameToUpdate.GameAndGenre = new List<GamesAndGenresModel>() { new GamesAndGenresModel{ Genre = genre} };
+                }
             }
             await _context.SaveChangesAsync();
 
