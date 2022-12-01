@@ -23,6 +23,6 @@ namespace GameStore.Models
 
         public string Publisher { get; set; }
 
-        public ICollection<GamesAndGenresModel> GameAndGenre { get; set; } = new List<GamesAndGenresModel>();
+        public IList<GamesAndGenresModel> GameAndGenre { get; set; } = new List<GamesAndGenresModel>();
     }
 }

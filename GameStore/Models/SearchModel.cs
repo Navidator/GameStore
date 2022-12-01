@@ -2,6 +2,6 @@
 {
     public class SearchModel
     {
-        public string SearchValue { get; set; }
+        public string? SearchValue { get; set; }
     }
 }

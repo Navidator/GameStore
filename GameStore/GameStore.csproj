@@ -31,6 +31,12 @@
     <Compile Remove="Migrations\20221126121912_SecondMigration.Designer.cs" />
     <Compile Remove="Migrations\20221126124056_InitialMigration.cs" />
     <Compile Remove="Migrations\20221126124056_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20221126124700_InitialMigration.cs" />
+    <Compile Remove="Migrations\20221126124700_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20221129142249_secondMigration.cs" />
+    <Compile Remove="Migrations\20221129142249_secondMigration.Designer.cs" />
+    <Compile Remove="Migrations\20221129143648_AdditionOfGamesAndGenresModel.cs" />
+    <Compile Remove="Migrations\20221129143648_AdditionOfGamesAndGenresModel.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

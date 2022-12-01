@@ -21,7 +21,19 @@ namespace GameStore.Controllers
         [HttpGet, Route("Filter")]
         public async Task<IActionResult> Search([FromBody] SearchModel search)
         {
-            return new OkObjectResult(await _searchService.Search(search.SearchValue.ToString()));
+            try
+            {
+                if(string.IsNullOrEmpty(search.SearchValue))
+                {
+                    return new OkObjectResult(await _searchService.Search(""));
+                }
+                else
+                    return new OkObjectResult(await _searchService.Search(search.SearchValue.ToString()));
+            }
+            catch (System.Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpGet, Route("Filter/{id})")]
@@ -51,19 +63,17 @@ namespace GameStore.Controllers
 
         public async Task<List<GameModel>> SearchByName(string searchValue)
         {
-            var x = await _context.Games.Where(game => game.Name.Contains(searchValue)).ToListAsync();
-
-            if (x == null)
+            if (string.IsNullOrEmpty(searchValue))
             {
-                return null;
+                return await _context.Games.ToListAsync();
             }
 
-            return x;
+            return await _context.Games.Where(game => game.Name.Contains(searchValue)).ToListAsync();
         }
 
         public async Task<List<GameModel>> FilterByGenre(int genreId)
         {
-            var retreivedGamesByCategodyId = _context.GamesAndGenres.Where(genre => genre.GenreId.Equals(genreId)).ToListAsync();
+            var retreivedGamesByCategodyId = await _context.GamesAndGenres.Where(genre => genre.GenreId.Equals(genreId)).ToListAsync();
 
             return null;
         }

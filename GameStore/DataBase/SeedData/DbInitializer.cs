@@ -29,8 +29,7 @@ namespace GameStore.DataBase.SeedData
             new GenreModel{GenreName="Simulation"},
             new GenreModel{GenreName="Puzzle"},
             new GenreModel{GenreName="SinglePlayer"},
-            new GenreModel{GenreName="Multiplayer"}
-};
+            new GenreModel{GenreName="Multiplayer"}};
             foreach (GenreModel c in genres)
             {
                 context.Genres.Add(c);
@@ -42,11 +41,15 @@ namespace GameStore.DataBase.SeedData
 
             var games = new GameModel[]
             {
-                new GameModel{Name="Witcher 1", Description="Witcher 1 game", GameDeveloper="CD PROJEKT RED", Publisher="CD PROJEKT RED", ReleaseDate=DateTime.Parse("2008-09-16"), Price=10, 
+                new GameModel{Name="Witcher 1", Description="Witcher 1 game", GameDeveloper="CD PROJEKT RED", Publisher="CD PROJEKT RED", ReleaseDate=DateTime.Parse("2008-09-16"), Price=10,
                     GameAndGenre = new List<GamesAndGenresModel>()
                     { new GamesAndGenresModel{ Genre=testGenre} } },
-                new GameModel{Name="Witcher 2", Description="Witcher 2 game", GameDeveloper="CD PROJEKT RED", Publisher="CD PROJEKT RED", ReleaseDate=DateTime.Parse("2011-05-17"), Price=15},
-                new GameModel{Name="Witcher 3", Description="Witcher 3 game", GameDeveloper="CD PROJEKT RED", Publisher="CD PROJEKT RED", ReleaseDate=DateTime.Parse("2015-05-18"), Price=20}
+                new GameModel{Name="Witcher 2", Description="Witcher 2 game", GameDeveloper="CD PROJEKT RED", Publisher="CD PROJEKT RED", ReleaseDate=DateTime.Parse("2011-05-17"), Price=15, 
+                    GameAndGenre = new List<GamesAndGenresModel>()
+                    { new GamesAndGenresModel{ Genre=testGenre} } },
+                new GameModel{Name="Witcher 3", Description="Witcher 3 game", GameDeveloper="CD PROJEKT RED", Publisher="CD PROJEKT RED", ReleaseDate=DateTime.Parse("2015-05-18"), Price=20, 
+                    GameAndGenre = new List<GamesAndGenresModel>()
+                    { new GamesAndGenresModel{ Genre=testGenre} } }
             };
             foreach (GameModel g in games)
             {

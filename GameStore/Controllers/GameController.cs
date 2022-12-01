@@ -2,6 +2,7 @@
 using GameStore.Models;
 using GameStore.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -60,6 +61,19 @@ namespace GameStore.Controllers
             {
                 return BadRequest(e.Message);
             } 
+        }
+
+        [HttpPut, Route("AddCategories/{id}")]
+        public async Task<IActionResult> AddCategoriesToGame([FromBody] List<int> gameAndGenre, int id)
+        {
+            try
+            {
+                return new OkObjectResult(await _gameService.AddCategoriesToGame(gameAndGenre, id));
+            }
+            catch (DoesNotExistException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpDelete, Route("Delete/{id}")]
