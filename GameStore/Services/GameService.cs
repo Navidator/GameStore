@@ -1,7 +1,6 @@
 ﻿using GameStore.CustomExceptions;
 using GameStore.DataBase;
 using GameStore.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +21,9 @@ namespace GameStore.Services
             return await _context.Games.ToListAsync();
         }
 
-        public Task<GameModel> GetGameById(int id)
+        public async Task<GameModel> GetGameById(int id)
         {
-            return _context.Games.Where(games => games.GameId == id).FirstOrDefaultAsync();
+            return await _context.Games.Where(games => games.GameId == id).FirstOrDefaultAsync();
         }
 
         public async Task<GameModel> AddGame(GameModel newGame)
@@ -65,5 +64,10 @@ namespace GameStore.Services
 
             return gameToDelete;
         }
+
+        //public async Task<GameModel> FilterGame()
+        //{
+
+        //}
     }
 }

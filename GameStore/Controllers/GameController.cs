@@ -2,15 +2,16 @@
 using GameStore.Models;
 using GameStore.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GameStore.Controllers
 {
     [Route("/[controller]")]
-    public class HomeController : Controller
+    public class GameController : Controller
     {
         private readonly GameService _gameService;
-        public HomeController(GameService gamesService)
+        public GameController(GameService gamesService)
         {
             _gameService = gamesService;
         }

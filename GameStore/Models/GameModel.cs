@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace GameStore.Models
@@ -21,5 +22,7 @@ namespace GameStore.Models
         public string ImageUrl { get; set; }
 
         public string Publisher { get; set; }
+
+        public ICollection<GamesAndGenresModel> GameAndGenre { get; set; } = new List<GamesAndGenresModel>();
     }
 }
