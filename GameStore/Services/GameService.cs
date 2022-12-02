@@ -2,8 +2,10 @@
 using GameStore.DataBase;
 using GameStore.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace GameStore.Services
@@ -23,7 +25,7 @@ namespace GameStore.Services
 
         public async Task<GameModel> GetGameById(int id)
         {
-            return await _context.Games.Where(games => games.GameId == id).FirstOrDefaultAsync();
+            return await _context.Games.Where(games => games.GameId == id).Include(x => x.GameAndGenre).ThenInclude(x => x.Genre).FirstOrDefaultAsync();
         }
 
         public async Task<GameModel> AddGame(GameModel newGame)
@@ -53,9 +55,9 @@ namespace GameStore.Services
             return gameToUpdate;
         }
 
-        public async Task<GameModel> AddCategoriesToGame(List<int> categoryIds___, int id)
+        public async Task<GameModel> AddCategoriesToGame(List<int> categoryIds, int id)
         {
-            List<int> categoryIds = new List<int>() { 2, 3, 5, 7, 8, 9, 10 }; //es gasasworebelia
+            //List<int> categoryIds = new List<int>() { 2, 3, 5, 7, 8, 9, 10 }; //es gasasworebelia
 
             var gameToUpdate = await _context.Games.Where(game => game.GameId == id).FirstOrDefaultAsync();
             //var categoriesToAdd = new List<GamesAndGenresModel>();
@@ -68,12 +70,17 @@ namespace GameStore.Services
 
                     //var x = new List<GamesAndGenresModel>() { new GamesAndGenresModel{ Genre = genre} };
 
-                    gameToUpdate.GameAndGenre = new List<GamesAndGenresModel>() { new GamesAndGenresModel{ Genre = genre} };
+                    gameToUpdate.GameAndGenre = new List<GamesAndGenresModel>() { new GamesAndGenresModel{ Genre = genre} }; //anu ra xdeba tamashi mogaqvs romelsac kategoriebi aqvs da shen umateb kide kategoriesb? ara. tamashs rom vaketeb es action maq rom mere kategoriebi mivamagro. tavidan tamashis gaketebastan ertad ver vqeni da ase movifiqre. tamashi rom gavakete mere vidzaxeb am funqcias da kategoriebi minda rom mivamagro mara
                 }
             }
             await _context.SaveChangesAsync();
 
             return gameToUpdate;
+        }
+
+        public IQueryable<GenreModel> GetGenres (Expression<Func<GenreModel, bool>> expression)
+        {
+            return _context.Genres.Where(expression);
         }
 
         public async Task<GameModel> DeleteGame(int id)
