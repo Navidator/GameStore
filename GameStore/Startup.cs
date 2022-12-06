@@ -1,5 +1,7 @@
 using GameStore.Controllers;
 using GameStore.DataBase;
+using GameStore.DataBase.Repository;
+using GameStore.DataBase.UnitOfWork;
 using GameStore.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,6 +38,10 @@ namespace GameStore
                                                     (Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<GameService>();
             services.AddScoped<SearchService>();
+            services.AddScoped<IGameRepository, GameRepository>();
+            //services.AddScoped<RepositoryProvider>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

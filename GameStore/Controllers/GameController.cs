@@ -36,7 +36,7 @@ namespace GameStore.Controllers
             catch (DoesNotExistException e)
             {
                 return BadRequest(e.Message);
-            }  
+            }
         }
 
         [HttpPost]
@@ -44,39 +44,16 @@ namespace GameStore.Controllers
         {
             try
             {
-                //mapping should have separate class
-                GameModel model = new GameModel
-                {
-                    Name = dto.Name,
-                    Description = dto.Description,
-                    GameDeveloper = dto.GameDeveloper,
-                    ImageUrl = dto.ImageUrl,
-                    Price = dto.Price,
-                    Publisher = dto.Publisher,
-                    ReleaseDate = dto.ReleaseDate
-                };
-
-                var genres = await _gameService.GetGenres(x => dto.GenreIds.Contains(x.GenreId)).ToListAsync();
-
-                var gamesAndGenres = genres.Select(x => new GamesAndGenresModel
-                {
-                    Genre = x
-                });
-
-                model.GameAndGenre = gamesAndGenres.ToList();
-
-                //-------------------------
-
-                return new OkObjectResult(await _gameService.AddGame(model));
+                return new OkObjectResult(await _gameService.AddGame(dto));
             }
             catch (AlreadyExistException e)
             {
                 return BadRequest(e.Message);
-            }   
+            }
         }
 
         [HttpPut, Route("Edit/{id}")]
-        public async Task<IActionResult> EditGame([FromBody] GameModel editedGame, int id)
+        public async Task<IActionResult> EditGame([FromBody] EditGameDto editedGame, int id)
         {
             try
             {
@@ -88,18 +65,18 @@ namespace GameStore.Controllers
             } 
         }
 
-        [HttpPut, Route("AddCategories")]
-        public async Task<IActionResult> AddCategoriesToGame([FromBody] TestClass model) //refactor TestClass
-        {
-            try
-            {
-                return new OkObjectResult(await _gameService.AddCategoriesToGame(model.CategoryIds, model.Id));
-            }
-            catch (DoesNotExistException e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
+        //[HttpPut, Route("AddCategories")]
+        //public async Task<IActionResult> AddCategoriesToGame([FromBody] TestClass model) //refactor TestClass
+        //{
+        //    try
+        //    {
+        //        return new OkObjectResult(await _gameService.AddCategoriesToGame(model.CategoryIds, model.Id));
+        //    }
+        //    catch (DoesNotExistException e)
+        //    {
+        //        return BadRequest(e.Message);
+        //    }
+        //}
 
         [HttpDelete, Route("Delete/{id}")]
         public async Task<IActionResult> Delete (int id)
