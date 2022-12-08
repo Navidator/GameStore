@@ -37,15 +37,41 @@
     <Compile Remove="Migrations\20221129142249_secondMigration.Designer.cs" />
     <Compile Remove="Migrations\20221129143648_AdditionOfGamesAndGenresModel.cs" />
     <Compile Remove="Migrations\20221129143648_AdditionOfGamesAndGenresModel.Designer.cs" />
+    <Compile Remove="Migrations\20221201132702_InitialMigration.cs" />
+    <Compile Remove="Migrations\20221201132702_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20221208145933_AddedInitialIdentityImplementation.cs" />
+    <Compile Remove="Migrations\20221208145933_AddedInitialIdentityImplementation.Designer.cs" />
+    <Compile Remove="Migrations\20221208145955_AddedInitialIdentityImplementation.cs" />
+    <Compile Remove="Migrations\20221208145955_AddedInitialIdentityImplementation.Designer.cs" />
+    <Compile Remove="Migrations\20221208150502_AddedInitialIdentityImplementation.cs" />
+    <Compile Remove="Migrations\20221208150502_AddedInitialIdentityImplementation.Designer.cs" />
+    <Compile Remove="Migrations\20221208150907_RemovedUnusedProperties.cs" />
+    <Compile Remove="Migrations\20221208150907_RemovedUnusedProperties.Designer.cs" />
+    <Compile Remove="Migrations\20221208152459_RefactoredRelationships.cs" />
+    <Compile Remove="Migrations\20221208152459_RefactoredRelationships.Designer.cs" />
+    <Compile Remove="Migrations\20221208152655_AddedIdentityMigration.cs" />
+    <Compile Remove="Migrations\20221208152655_AddedIdentityMigration.Designer.cs" />
+    <Compile Remove="Migrations\20221208153751_AddedIdentityMigration.cs" />
+    <Compile Remove="Migrations\20221208153751_AddedIdentityMigration.Designer.cs" />
+    <Compile Remove="Migrations\20221208161744_ChangedIdentityFromNVARCHARToInt.cs" />
+    <Compile Remove="Migrations\20221208161744_ChangedIdentityFromNVARCHARToInt.Designer.cs" />
+    <Compile Remove="Migrations\20221208161924_ChangedIdentityFromNVARCHARToInt.cs" />
+    <Compile Remove="Migrations\20221208161924_ChangedIdentityFromNVARCHARToInt.Designer.cs" />
+    <Compile Remove="Migrations\20221208195237_ChangedIdentityFromNVARCHARToInt.cs" />
+    <Compile Remove="Migrations\20221208195237_ChangedIdentityFromNVARCHARToInt.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.31" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.31" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.31" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.31" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.31">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
 

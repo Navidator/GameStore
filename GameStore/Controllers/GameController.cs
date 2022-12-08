@@ -26,7 +26,7 @@ namespace GameStore.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("GetGame/{id}")]
         public async Task<IActionResult> GetGameById(int id)
         {
             try
@@ -39,7 +39,7 @@ namespace GameStore.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost, Route("AddGame")]
         public async Task<IActionResult> AddGame([FromBody] CreateGameDto dto)
         {
             try
@@ -64,19 +64,6 @@ namespace GameStore.Controllers
                 return BadRequest(e.Message);
             } 
         }
-
-        //[HttpPut, Route("AddCategories")]
-        //public async Task<IActionResult> AddCategoriesToGame([FromBody] TestClass model) //refactor TestClass
-        //{
-        //    try
-        //    {
-        //        return new OkObjectResult(await _gameService.AddCategoriesToGame(model.CategoryIds, model.Id));
-        //    }
-        //    catch (DoesNotExistException e)
-        //    {
-        //        return BadRequest(e.Message);
-        //    }
-        //}
 
         [HttpDelete, Route("Delete/{id}")]
         public async Task<IActionResult> Delete (int id)
