@@ -18,7 +18,7 @@ namespace GameStore.Controllers
             _searchService = searchService;
         }
 
-        [HttpGet, Route("Filter")]
+        [HttpPost, Route("SearchGame")]
         public async Task<IActionResult> Search([FromBody] SearchModel search)
         {
             try
@@ -36,7 +36,7 @@ namespace GameStore.Controllers
             }
         }
 
-        [HttpGet, Route("Filter/{id})")]
+        [HttpGet, Route("FilterByGenre/{id})")]
         public async Task<IActionResult> FilterByGenre(int id)
         {
             return new OkObjectResult(await _searchService.FilterByGenre(id));

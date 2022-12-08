@@ -16,28 +16,26 @@ namespace GameStore.Controllers
             _genresService = genresService;
         }
 
-
-
         [HttpGet]
         [Route("AllGenre")]
         public async Task<IActionResult> GetAllGenres()
         {
             return new OkObjectResult(await _genresService.GetAllGenres());
         }
+
         [HttpGet]
         [Route("Genre/{id}")]
         public async Task<IActionResult> GetGenreById(int id)
         {
             return new OkObjectResult(await _genresService.GetGenreById(id));
         }
+
         [HttpPost]
         [Route("AddGenre")]
         public async Task<IActionResult> AddGenre([FromBody] GenreModel newGenre, int? genreId)
         {
             return new OkObjectResult(await _genresService.AddGenre(newGenre, genreId));
         }
-
-
 
         [HttpPut]
         [Route("EditGenre/{id}")]

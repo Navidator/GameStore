@@ -1,9 +1,10 @@
 ﻿using GameStore.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.DataBase
 {
-    public class GameStoreContext : DbContext
+    public class GameStoreContext : IdentityDbContext<UserModel/*, UserRoleModel, int*/>
     {
         public GameStoreContext(DbContextOptions<GameStoreContext> options) : base(options)
         {
@@ -17,25 +18,25 @@ namespace GameStore.DataBase
         public DbSet<GenreModel> Genres { get; set; }
         public DbSet<OrderModel> Orders { get; set; }
         public DbSet<PaymentTypeModel> PaymentTypes { get; set; }
-        public DbSet<RoleModel> Roles { get; set; }
-        public DbSet<UserModel> Users { get; set; }
+        //public DbSet<RoleModel> Roles { get; set; }
+        //public DbSet<UserModel> Users { get; set; }
         public DbSet<GamesAndGenresModel> GamesAndGenres { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<GenreModel>()
                 .HasMany(e => e.Children)
                 .WithOne(e => e.Parent)
                 .OnDelete(DeleteBehavior.Restrict);
 
-
-
             modelBuilder.Entity<GamesAndGenresModel>()
-                .HasOne<GameModel>(x => x.Game)
+                .HasOne(x => x.Game)
                 .WithMany(x => x.GameAndGenre)
                 .HasForeignKey(x => x.GameId);
             modelBuilder.Entity<GamesAndGenresModel>()
-                .HasOne<GenreModel>(x => x.Genre)
+                .HasOne(x => x.Genre)
                 .WithMany(x => x.GameAndGenre)
                 .HasForeignKey(x => x.GenreId);
         }

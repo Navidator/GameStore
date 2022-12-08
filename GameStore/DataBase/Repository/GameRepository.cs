@@ -14,7 +14,6 @@ namespace GameStore.DataBase.Repository
     public class GameRepository : IGameRepository
     {
         private readonly GameStoreContext _context;
-        //private readonly IUnitOfWork _unitOfWork;
 
         public GameRepository(GameStoreContext context)
         {
@@ -82,7 +81,16 @@ namespace GameStore.DataBase.Repository
             {
                 if (x.EditType == EditTypeValue.Add)
                 {
-                    gameToUpdate.GameAndGenre.Add(new GamesAndGenresModel { GenreId = x.GenreId });
+                    if (!gameToUpdate.GameAndGenre.Any(g => g.GenreId == x.GenreId))
+                    {
+                        gameToUpdate.GameAndGenre.Add(new GamesAndGenresModel { GenreId = x.GenreId });
+                    }
+                    else
+                    {
+                        var genre = _context.Genres.Where(x => x.GenreId == x.GenreId).FirstOrDefault();
+
+                        throw new AlreadyExistException($"{genre.GenreName} is already assigned to the game");
+                    }     
                 }
                 else if (x.EditType == EditTypeValue.Remove)
                 {
@@ -101,7 +109,7 @@ namespace GameStore.DataBase.Repository
             GameModel gameToDelete = await _context.Games.Where(game => game.GameId == id).FirstOrDefaultAsync();
             if (gameToDelete == null)
             {
-                throw new DoesNotExistException("Selected ame Could not be found");
+                throw new DoesNotExistException("Selected game could not be found");
             }
             await _context.SaveChangesAsync();
 
