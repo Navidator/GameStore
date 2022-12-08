@@ -7,5 +7,6 @@ namespace GameStore.Services.Service_Interfaces
     public interface IAuthService
     {
         Task<UserModel> Register(RegisterUserDto registerUserDto);
+        Task<UserModel> Login(LoginUserDto loginUserDto);
     }
 }

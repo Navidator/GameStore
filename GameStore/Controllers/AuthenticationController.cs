@@ -16,15 +16,31 @@ namespace GameStore.Controllers
             _authenticationService = authenticationService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterUserDto dto)
+        [HttpPost, Route("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterUserDto dto)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Please provide all the fields");
+                return BadRequest("Please provide all fields");
+            }
+            return new OkObjectResult(await _authenticationService.Register(dto));
+        }
+
+        [HttpPost, Route("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginUserDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Please provide all fields");
             }
 
-            return new OkObjectResult(await _authenticationService.Register(dto));
+            var user = await _authenticationService.Login(dto);
+
+            if (user != null)
+            {
+                return new OkObjectResult(user);
+            }
+            return Unauthorized();
         }
     }
 }

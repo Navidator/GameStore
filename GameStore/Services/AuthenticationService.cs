@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,10 +17,10 @@ namespace GameStore.Services
     public class AuthenticationService : IAuthService
     {
         private readonly UserManager<UserModel> _userManager;
+        private readonly SignInManager<UserModel> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly GameStoreContext _context;
         private readonly IConfiguration _configuration;
-        //private readonly IUnitOfWork _unitOfWork;
 
         public AuthenticationService(UserManager<UserModel> userManager, RoleManager<IdentityRole> roleManager, GameStoreContext context, IConfiguration configuration/*, IUnitOfWork unitOfWork*/)
         {
@@ -30,7 +31,7 @@ namespace GameStore.Services
             //_unitOfWork = unitOfWork;
         }
 
-        public async Task<UserModel> Register([FromBody]RegisterUserDto registerUserDto)
+        public async Task<UserModel> Register(RegisterUserDto registerUserDto)
         {
             var user = new UserModel();
 
@@ -66,6 +67,24 @@ namespace GameStore.Services
             }
 
             return user;
+        }
+
+        public async Task<UserModel> Login(LoginUserDto loginUserDto)
+        {
+            if (loginUserDto == null)
+            {
+                throw new ArgumentNullException(nameof(loginUserDto));
+            }
+
+            var user = await _userManager.FindByEmailAsync(loginUserDto.email);
+            var userCheck = await _userManager.CheckPasswordAsync(user, loginUserDto.password);
+
+            if (user != null && userCheck is true)
+            {
+                return user;
+            }
+
+            return null;
         }
     }
 }
