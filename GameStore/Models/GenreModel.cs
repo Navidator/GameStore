@@ -8,6 +8,7 @@ namespace GameStore.Models
     {
         [Key]
         public int GenreId { get; set; }
+
         public string GenreName { get; set; }
 
         [ForeignKey("GenreModel")]

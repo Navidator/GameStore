@@ -1,12 +1,13 @@
 ﻿using GameStore.DataBase.UnitOfWork;
 using GameStore.Dtos;
 using GameStore.Models;
+using GameStore.Services.Service_Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GameStore.Services
 {
-    public class GameService
+    public class GameService : IGameService
     {
         private readonly IUnitOfWork _unitOfWork;
         public GameService(IUnitOfWork unitOfWork)

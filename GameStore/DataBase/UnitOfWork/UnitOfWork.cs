@@ -9,13 +9,15 @@ namespace GameStore.DataBase.UnitOfWork
     {
         private readonly GameStoreContext _context;
         public IGameRepository GameRepository { get; set; }
-        public IAuthService AuthenticationService { get; set; }
+        public IAuthRepository AuthRepository { get; set; }
+        //public IAuthService AuthenticationService { get; set; }
 
-        public UnitOfWork(GameStoreContext context, IGameRepository gameRepository, IAuthService authService)
+        public UnitOfWork(GameStoreContext context, IGameRepository gameRepository, IAuthRepository authRepository)
         {
             _context = context;
             GameRepository = gameRepository;
-            AuthenticationService = authService;
+            AuthRepository = authRepository;
+            //AuthenticationService = authService;
         }
         public async Task<int> Complete()
         {
