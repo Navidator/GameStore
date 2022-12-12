@@ -18,10 +18,8 @@ namespace GameStore.DataBase
         public DbSet<GenreModel> Genres { get; set; }
         public DbSet<OrderModel> Orders { get; set; }
         public DbSet<PaymentTypeModel> PaymentTypes { get; set; }
-
-        //public DbSet<RoleModel> Roles { get; set; }
-        //public DbSet<UserModel> Users { get; set; }
         public DbSet<GamesAndGenresModel> GamesAndGenres { get; set; }
+        public DbSet<RefreshTokenModel> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

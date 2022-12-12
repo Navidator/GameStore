@@ -12,6 +12,8 @@ namespace GameStore.Models
         [Required]
         public string LastName { get; set; }
 
+        public string AvatarUrl { get; set; }
+
         public int GenderId { get; set; }
 
         public string City { get; set; }

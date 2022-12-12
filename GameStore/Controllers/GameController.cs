@@ -1,11 +1,8 @@
 ﻿using GameStore.CustomExceptions;
 using GameStore.Dtos;
-using GameStore.Models;
 using GameStore.Services;
-using GameStore.TEST;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace GameStore.Controllers
@@ -25,8 +22,8 @@ namespace GameStore.Controllers
             return new OkObjectResult(await _gameService.GetAllGames());
         }
 
-        [HttpGet]
-        [Route("GetGame/{id}")]
+        [Authorize]
+        [HttpGet, Route("GetGame/{id}")]
         public async Task<IActionResult> GetGameById(int id)
         {
             try
@@ -39,6 +36,7 @@ namespace GameStore.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost, Route("AddGame")]
         public async Task<IActionResult> AddGame([FromBody] CreateGameDto dto)
         {
@@ -52,6 +50,7 @@ namespace GameStore.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut, Route("Edit/{id}")]
         public async Task<IActionResult> EditGame([FromBody] EditGameDto editedGame, int id)
         {
@@ -65,6 +64,7 @@ namespace GameStore.Controllers
             } 
         }
 
+        [Authorize]
         [HttpDelete, Route("Delete/{id}")]
         public async Task<IActionResult> Delete (int id)
         {
