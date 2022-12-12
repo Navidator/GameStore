@@ -59,6 +59,8 @@
     <Compile Remove="Migrations\20221208161924_ChangedIdentityFromNVARCHARToInt.Designer.cs" />
     <Compile Remove="Migrations\20221208195237_ChangedIdentityFromNVARCHARToInt.cs" />
     <Compile Remove="Migrations\20221208195237_ChangedIdentityFromNVARCHARToInt.Designer.cs" />
+    <Compile Remove="Migrations\20221212082502_AddedRefreshToken.cs" />
+    <Compile Remove="Migrations\20221212082502_AddedRefreshToken.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

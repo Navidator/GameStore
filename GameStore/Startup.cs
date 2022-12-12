@@ -13,6 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System;
 using System.Text;
 
 namespace GameStore
@@ -35,6 +37,23 @@ namespace GameStore
             services.AddDbContext<GameStoreContext>(options => 
                                                     options.UseSqlServer
                                                     (Configuration.GetConnectionString("DefaultConnection")));
+            
+            var tokenValidationParemeters = new TokenValidationParameters()
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["JWT:Secret"])),
+
+                ValidateIssuer = true,
+                ValidIssuer = Configuration["JWT:Issuer"],
+
+                ValidateAudience = true,
+                ValidAudience = Configuration["JWT:Audience"],
+
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+            services.AddSingleton(tokenValidationParemeters);
+
             //AddIdentity
             services.AddIdentity<UserModel, IdentityRole>()
                 .AddEntityFrameworkStores<GameStoreContext>()
@@ -62,21 +81,34 @@ namespace GameStore
             {
                 options.SaveToken = true;
                 options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["JWT:Secret"])),
-                    
-                    ValidateIssuer = true,
-                    ValidIssuer = Configuration["JWT:Issuer"],
-
-                    ValidateAudience = true,
-                    ValidAudience = Configuration["JWT:Audience"]
-                };
+                options.TokenValidationParameters = tokenValidationParemeters;
             });
 
             //Swagger
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "GameStore Api", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                   {
+                      new OpenApiSecurityScheme
+                      {
+                         Reference = new OpenApiReference
+                         {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                         }
+                      },
+                      new string[] { }
+                   }
+                });
+            });
 
             //Add services
             services.AddScoped<GameService>();
@@ -84,6 +116,7 @@ namespace GameStore
             services.AddScoped<IGameRepository, GameRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthService, AuthenticationService>();
+            //services.AddScoped<SignInManager<UserModel>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
