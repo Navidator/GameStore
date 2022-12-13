@@ -6,10 +6,12 @@ namespace GameStore.DataBase.Repository
 {
     public interface IAuthRepository
     {
-        Task<UserModel> Register(RegisterUserDto registerUserDto);
-        Task<AuthResultDto> Login(LoginUserDto loginUserDto);
+        Task<UserModel> Login(LoginUserDto loginUserDto);
+        Task<UserModel> Register(UserModel registerUser);
+        //Task<AuthResultDto> Login(LoginUserDto loginUserDto);
         Task<UserModel> EditUser(EditUserDto editUserDto);
-        Task<AuthResultDto> RefreshToken(RefreshTokenDto refreshTokenDto);
-        Task SignOut();
+        //Task<AuthResultDto> RefreshToken(RefreshTokenDto refreshTokenDto);
+        Task AddRefreshTokenAsync(RefreshTokenModel refreshToken);
+        Task<RefreshTokenModel> GetRefreshTokenAsync(string token);
     }
 }
