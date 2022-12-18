@@ -1,3 +1,4 @@
+using GameStore.Data.Repositories.GameCommentRepository;
 using GameStore.DataBase;
 using GameStore.DataBase.Repository;
 using GameStore.DataBase.UnitOfWork;
@@ -118,6 +119,7 @@ namespace GameStore
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthService, AuthenticationService>();
             services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

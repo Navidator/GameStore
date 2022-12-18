@@ -1,18 +1,14 @@
 ﻿using GameStore.CustomExceptions;
-using GameStore.DataBase;
-using GameStore.DataBase.Repository;
 using GameStore.DataBase.UnitOfWork;
 using GameStore.Dtos;
 using GameStore.Models;
 using GameStore.Services.Service_Interfaces;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,20 +20,16 @@ namespace GameStore.Services
         private readonly UserManager<UserModel> _userManager;
         private readonly SignInManager<UserModel> _signInManager;
         private readonly TokenValidationParameters _tokenValidationParameters;
-        //private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
-        //private readonly IAuthRepository _authRepository;
 
         public AuthenticationService(UserManager<UserModel> userManager, IConfiguration configuration, TokenValidationParameters tokenValidationParameters, IUnitOfWork unitOfWork, SignInManager<UserModel> signInManager)
         {
             _userManager = userManager;
-            //_roleManager = roleManager;
             _configuration = configuration;
             _signInManager = signInManager;
             _tokenValidationParameters = tokenValidationParameters;
             _unitOfWork = unitOfWork;
-            //_authRepository = authRepository;
         }
 
         public async Task<UserModel> Register(RegisterUserDto registerUserDto)
@@ -54,11 +46,13 @@ namespace GameStore.Services
             }
             else if (await _userManager.FindByEmailAsync(registerUserDto.Email) == null)
             {
+                var passwordHash = new PasswordHasher<UserModel>();
                 user.FirstName = registerUserDto.FirstName;
                 user.LastName = registerUserDto.LastName;
                 user.UserName = registerUserDto.UserName;
                 user.Email = registerUserDto.Email;
                 user.SecurityStamp = Guid.NewGuid().ToString();
+                user.PasswordHash = passwordHash.HashPassword(user, registerUserDto.Password);
             }
 
             return await _unitOfWork.AuthRepository.Register(user);
@@ -86,28 +80,6 @@ namespace GameStore.Services
 
         public async Task<UserModel> EditUser(EditUserDto editUserDto)
         {
-            //var user = _context.Users.Where(user => user.Email == editUserDto.Email).FirstOrDefault();
-            //if (editUserDto == null)
-            //{
-            //    throw new ArgumentNullException(nameof(editUserDto));
-            //}
-            //else if (await _userManager.FindByEmailAsync(editUserDto.Email) != null)
-            //{
-            //    user.FirstName = editUserDto.FirstName;
-            //    user.LastName = editUserDto.LastName;
-            //    user.UserName = editUserDto.UserName;
-            //    user.Country = editUserDto.Country;
-            //    user.City = editUserDto.City;
-            //    user.ZipCode = editUserDto.ZipCode;
-            //    user.AvatarUrl = editUserDto.AvatarUrl;
-
-            //    await _context.SaveChangesAsync();
-
-            //    return user;
-            //}
-            //else
-            //    return null;
-
             return await _unitOfWork.AuthRepository.EditUser(editUserDto);
         }
 

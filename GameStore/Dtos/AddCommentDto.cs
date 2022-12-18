@@ -12,7 +12,5 @@ namespace GameStore.Dtos
 
         [Required]
         public int GameId { get; set; }
-
-        public int MyProperty { get; set; }
     }
 }

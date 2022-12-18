@@ -19,6 +19,8 @@ namespace GameStore.DataBase
         public DbSet<OrderModel> Orders { get; set; }
         public DbSet<PaymentTypeModel> PaymentTypes { get; set; }
         public DbSet<GamesAndGenresModel> GamesAndGenres { get; set; }
+        public DbSet<GameAndCommentModel> GameAndComments { get; set; }
+        public DbSet<UserAndCommentModel> UserAndComments { get; set; }
         public DbSet<RefreshTokenModel> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,6 +40,30 @@ namespace GameStore.DataBase
                 .HasOne(x => x.Genre)
                 .WithMany(x => x.GameAndGenre)
                 .HasForeignKey(x => x.GenreId);
+
+
+            modelBuilder.Entity<CommentModel>()
+                .HasMany(x => x.Children)
+                .WithOne(x => x.Parent)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<GameAndCommentModel>()
+                .HasOne(x => x.Game)
+                .WithMany(x => x.GameAndComments)
+                .HasForeignKey(x => x.GameId);
+            modelBuilder.Entity<GameAndCommentModel>()
+                .HasOne(x => x.Comment)
+                .WithMany(x => x.GameAndComment)
+                .HasForeignKey(x => x.CommentId);
+
+            modelBuilder.Entity<UserAndCommentModel>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.UserAndComment)
+                .HasForeignKey(x => x.UserId);
+            modelBuilder.Entity<UserAndCommentModel>()
+                .HasOne(x => x.Comment)
+                .WithMany(x => x.UserAndComment)
+                .HasForeignKey(x => x.CommentId);
         }
     }
 }

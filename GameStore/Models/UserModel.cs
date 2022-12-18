@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -21,5 +22,7 @@ namespace GameStore.Models
         public string Country { get; set; }
 
         public int ZipCode { get; set; }
+
+        public IList<UserAndCommentModel> UserAndComment { get; set; } = new List<UserAndCommentModel>();
     }
 }

@@ -59,8 +59,16 @@
     <Compile Remove="Migrations\20221208161924_ChangedIdentityFromNVARCHARToInt.Designer.cs" />
     <Compile Remove="Migrations\20221208195237_ChangedIdentityFromNVARCHARToInt.cs" />
     <Compile Remove="Migrations\20221208195237_ChangedIdentityFromNVARCHARToInt.Designer.cs" />
+    <Compile Remove="Migrations\20221208195309_ChangedIdentityFromINTToNVARCHAR.cs" />
+    <Compile Remove="Migrations\20221208195309_ChangedIdentityFromINTToNVARCHAR.Designer.cs" />
+    <Compile Remove="Migrations\20221209123102_ImplementationOfEditingUserInfo.cs" />
+    <Compile Remove="Migrations\20221209123102_ImplementationOfEditingUserInfo.Designer.cs" />
     <Compile Remove="Migrations\20221212082502_AddedRefreshToken.cs" />
     <Compile Remove="Migrations\20221212082502_AddedRefreshToken.Designer.cs" />
+    <Compile Remove="Migrations\20221212083547_AddedRefreshToken.cs" />
+    <Compile Remove="Migrations\20221212083547_AddedRefreshToken.Designer.cs" />
+    <Compile Remove="Migrations\20221214114749_AddedComments.cs" />
+    <Compile Remove="Migrations\20221214114749_AddedComments.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

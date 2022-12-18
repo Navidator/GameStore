@@ -7,6 +7,7 @@ namespace GameStore.DataBase.UnitOfWork
     {
         IGameRepository GameRepository { get; }
         IAuthRepository AuthRepository { get; }
+        ICommentRepository CommentRepository { get; }
         Task<int> Complete();
     }
 }
