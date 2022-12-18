@@ -6,5 +6,8 @@ namespace GameStore.Dtos
     {
         [MaxLength(600)]
         public string CommentText { get; set; }
+
+        [Required]
+        public int CommentId { get; set; }
     }
 }

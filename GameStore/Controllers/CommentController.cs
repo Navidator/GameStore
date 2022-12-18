@@ -10,43 +10,54 @@ namespace GameStore.Controllers
     public class CommentController : ControllerBase
     {
         private readonly ICommentService _commentService;
+
         public CommentController(ICommentService commentService)
         {
             _commentService = commentService;
         }
 
         [HttpGet, Route("GetGameComments/{id}")]
-        public async Task<IActionResult> GetAllCommentsByGame(int gameId)
+        public IActionResult GetAllCommentsByGame(int id)
         {
-            return null;
+            var comments = _commentService.GetAllComments(id);
+
+            return Ok(comments);
         }
 
-        [Authorize]
-        [HttpPost, Route("AddComment/{id}")]
+        //[Authorize]
+        [HttpPost, Route("AddComment")]
         public async Task<IActionResult> AddCommentToGame([FromBody] AddCommentDto comment)
         {
-            return null;
+            var result = await _commentService.AddComment(comment);
+
+            return Ok(result);
         }
 
-        [Authorize]
-        [HttpPost, Route("EditComment/{id}")]
-        public async Task<IActionResult> EditComment([FromBody] EditCommentDto editComment, string commentId)
+        //[Authorize]
+        [HttpPost, Route("EditComment")]
+        public async Task<IActionResult> EditComment([FromBody] EditCommentDto editComment)
         {
-            return null;
+            var result = await _commentService.EditComment(editComment);
+
+            return Ok(result);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpDelete, Route("RemoveComment/{id}")]
-        public async Task<IActionResult> RemoveComment(string commentId)
+        public async Task<IActionResult> RemoveComment(int id)
         {
-            return null;
+            var result = await _commentService.DeleteComment(id);
+
+            return Ok(result);
         }
 
-        [Authorize]
-        [HttpPost, Route("RestoreComment/{id}")]
-        public async Task<IActionResult> RestoreComment(string commentId)
+        //[Authorize]
+        [HttpPost, Route("HideComment/{id}")]
+        public async Task<IActionResult> HideComment(int id)
         {
-            return null;
+            var result = await _commentService.HideComment(id);
+
+            return Ok(result);
         }
     }
 }

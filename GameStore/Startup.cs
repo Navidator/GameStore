@@ -56,7 +56,7 @@ namespace GameStore
             services.AddSingleton(tokenValidationParemeters);
 
             //AddIdentity
-            services.AddIdentity<UserModel, IdentityRole>()
+            services.AddIdentity<UserModel, UserRoleModel>()
                 .AddEntityFrameworkStores<GameStoreContext>()
                 .AddDefaultTokenProviders();
 
@@ -114,6 +114,7 @@ namespace GameStore
             //Add services
             services.AddScoped<IGameService, GameService>();
             services.AddScoped<IGameRepository, GameRepository>();
+            services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<SearchService>();
             
             services.AddScoped<IUnitOfWork, UnitOfWork>();

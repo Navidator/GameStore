@@ -25,6 +25,6 @@ namespace GameStore.Models
 
         public IList<GamesAndGenresModel> GameAndGenre { get; set; } = new List<GamesAndGenresModel>();
 
-        public IList<GameAndCommentModel> GameAndComments { get; set; } = new List<GameAndCommentModel>();
+        public IList<CommentModel> Comments { get; set; } = new List<CommentModel>();
     }
 }

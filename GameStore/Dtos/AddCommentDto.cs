@@ -8,9 +8,11 @@ namespace GameStore.Dtos
         public string CommentText { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        public int UserId { get; set; }
 
         [Required]
         public int GameId { get; set; }
+
+        public int? ParentId { get; set; }
     }
 }

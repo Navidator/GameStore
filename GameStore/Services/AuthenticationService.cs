@@ -4,6 +4,7 @@ using GameStore.Dtos;
 using GameStore.Models;
 using GameStore.Services.Service_Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -99,7 +100,7 @@ namespace GameStore.Services
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var storedToken = await _unitOfWork.AuthRepository.GetRefreshTokenAsync(refreshTokenDto.RefreshToken);
-            var user = await _userManager.FindByIdAsync(storedToken.UserId);
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == storedToken.UserId);
 
             try
             {
@@ -125,7 +126,7 @@ namespace GameStore.Services
             var authClaims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())

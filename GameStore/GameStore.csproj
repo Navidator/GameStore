@@ -69,6 +69,18 @@
     <Compile Remove="Migrations\20221212083547_AddedRefreshToken.Designer.cs" />
     <Compile Remove="Migrations\20221214114749_AddedComments.cs" />
     <Compile Remove="Migrations\20221214114749_AddedComments.Designer.cs" />
+    <Compile Remove="Migrations\20221214115128_AddedComments.cs" />
+    <Compile Remove="Migrations\20221214115128_AddedComments.Designer.cs" />
+    <Compile Remove="Migrations\20221218130022_FixedRelationshipMigration.cs" />
+    <Compile Remove="Migrations\20221218130022_FixedRelationshipMigration.Designer.cs" />
+    <Compile Remove="Migrations\20221218130136_FixedRelationshipMigration.cs" />
+    <Compile Remove="Migrations\20221218130136_FixedRelationshipMigration.Designer.cs" />
+    <Compile Remove="Migrations\20221218130421_InitialMigration.cs" />
+    <Compile Remove="Migrations\20221218130421_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20221218140053_InitialMigration.cs" />
+    <Compile Remove="Migrations\20221218140053_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20221218140344_InitialMigration.cs" />
+    <Compile Remove="Migrations\20221218140344_InitialMigration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
