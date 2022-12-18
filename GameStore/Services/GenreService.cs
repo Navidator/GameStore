@@ -59,6 +59,7 @@ namespace GameStore.Services
             parentGenre.Children ??= new List<GenreModel>();
             parentGenre.Children.Add(genre);
             await _context.SaveChangesAsync();
+
             return genre;
         }
 
@@ -85,6 +86,7 @@ namespace GameStore.Services
             _context.Genres.Remove(findGenre);
 
             await _context.SaveChangesAsync();
+
             return findGenre;
         }
     }

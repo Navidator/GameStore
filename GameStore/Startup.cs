@@ -1,3 +1,4 @@
+using GameStore.Data.Repositories.GameCommentRepository;
 using GameStore.DataBase;
 using GameStore.DataBase.Repository;
 using GameStore.DataBase.UnitOfWork;
@@ -55,7 +56,7 @@ namespace GameStore
             services.AddSingleton(tokenValidationParemeters);
 
             //AddIdentity
-            services.AddIdentity<UserModel, IdentityRole>()
+            services.AddIdentity<UserModel, UserRoleModel>()
                 .AddEntityFrameworkStores<GameStoreContext>()
                 .AddDefaultTokenProviders();
 
@@ -111,12 +112,15 @@ namespace GameStore
             });
 
             //Add services
-            services.AddScoped<GameService>();
-            services.AddScoped<SearchService>();
+            services.AddScoped<IGameService, GameService>();
             services.AddScoped<IGameRepository, GameRepository>();
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<SearchService>();
+            
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthService, AuthenticationService>();
-            //services.AddScoped<SignInManager<UserModel>>();
+            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

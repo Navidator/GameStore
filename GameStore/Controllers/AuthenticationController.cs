@@ -62,7 +62,7 @@ namespace GameStore.Controllers
             {
                 return BadRequest();
             }
-            return new OkObjectResult(await _authenticationService.RefreshToken(refreshTokenDto));
+            return new OkObjectResult(await _authenticationService.RequestNewToken(refreshTokenDto));
         }
 
         [Authorize]

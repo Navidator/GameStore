@@ -1,5 +1,5 @@
 ﻿using GameStore.CustomExceptions;
-using GameStore.DataBase;
+using GameStore.DataBase.UnitOfWork;
 using GameStore.Dtos;
 using GameStore.Models;
 using GameStore.Services.Service_Interfaces;
@@ -10,7 +10,6 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,18 +21,16 @@ namespace GameStore.Services
         private readonly UserManager<UserModel> _userManager;
         private readonly SignInManager<UserModel> _signInManager;
         private readonly TokenValidationParameters _tokenValidationParameters;
-        private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly GameStoreContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AuthenticationService(UserManager<UserModel> userManager, RoleManager<IdentityRole> roleManager, GameStoreContext context, IConfiguration configuration/*, IUnitOfWork unitOfWork*/, SignInManager<UserModel> signInManager, TokenValidationParameters tokenValidationParameters)
+        public AuthenticationService(UserManager<UserModel> userManager, IConfiguration configuration, TokenValidationParameters tokenValidationParameters, IUnitOfWork unitOfWork, SignInManager<UserModel> signInManager)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
-            _context = context;
             _configuration = configuration;
             _signInManager = signInManager;
             _tokenValidationParameters = tokenValidationParameters;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<UserModel> Register(RegisterUserDto registerUserDto)
@@ -44,34 +41,22 @@ namespace GameStore.Services
             {
                 throw new ArgumentNullException(nameof(registerUserDto));
             }
-            if (await _userManager.FindByEmailAsync(registerUserDto.Email) !=null && await _userManager.FindByNameAsync(registerUserDto.UserName) != null)
+            if (await _userManager.FindByEmailAsync(registerUserDto.Email) != null && await _userManager.FindByNameAsync(registerUserDto.UserName) != null)
             {
                 throw new AlreadyExistException(nameof(registerUserDto));
             }
             else if (await _userManager.FindByEmailAsync(registerUserDto.Email) == null)
             {
-                user.FirstName= registerUserDto.FirstName;
-                user.LastName= registerUserDto.LastName;
-                user.UserName= registerUserDto.UserName;
-                user.Email= registerUserDto.Email;
+                var passwordHash = new PasswordHasher<UserModel>();
+                user.FirstName = registerUserDto.FirstName;
+                user.LastName = registerUserDto.LastName;
+                user.UserName = registerUserDto.UserName;
+                user.Email = registerUserDto.Email;
                 user.SecurityStamp = Guid.NewGuid().ToString();
+                user.PasswordHash = passwordHash.HashPassword(user, registerUserDto.Password);
             }
 
-            StringBuilder errorMessage = new StringBuilder();
-
-            var result = await _userManager.CreateAsync(user, registerUserDto.Password);
-
-            if (!result.Succeeded) 
-            { 
-                foreach(var error in result.Errors)
-                {
-                    errorMessage.AppendLine(error.Description);
-                }
-
-                throw new CouldNotRegisterUserException(errorMessage.ToString());
-            }
-
-            return user;
+            return await _unitOfWork.AuthRepository.Register(user);
         }
 
         public async Task<AuthResultDto> Login(LoginUserDto loginUserDto)
@@ -81,7 +66,7 @@ namespace GameStore.Services
                 throw new ArgumentNullException(nameof(loginUserDto));
             }
 
-            var user = await _userManager.FindByEmailAsync(loginUserDto.email);
+            var user = await _unitOfWork.AuthRepository.Login(loginUserDto);
             var userCheck = await _userManager.CheckPasswordAsync(user, loginUserDto.password);
 
             if (user != null && userCheck is true)
@@ -96,46 +81,26 @@ namespace GameStore.Services
 
         public async Task<UserModel> EditUser(EditUserDto editUserDto)
         {
-            var user = _context.Users.Where(user => user.Email == editUserDto.Email).FirstOrDefault();
-            if (editUserDto == null)
-            {
-                throw new ArgumentNullException(nameof(editUserDto));
-            }
-            else if (await _userManager.FindByEmailAsync(editUserDto.Email) != null)
-            {
-                user.FirstName = editUserDto.FirstName;
-                user.LastName = editUserDto.LastName;
-                user.UserName = editUserDto.UserName;
-                user.Country = editUserDto.Country;
-                user.City = editUserDto.City;
-                user.ZipCode = editUserDto.ZipCode;
-                user.AvatarUrl = editUserDto.AvatarUrl;
-
-                await _context.SaveChangesAsync();
-
-                return user;
-            }
-            else
-                return null;
+            return await _unitOfWork.AuthRepository.EditUser(editUserDto);
         }
 
-        public async Task<AuthResultDto> RefreshToken(RefreshTokenDto refreshTokenDto)
+        public async Task<AuthResultDto> RequestNewToken(RefreshTokenDto refreshTokenDto)
         {
-            if (refreshTokenDto == null)
-            {
-                throw new ArgumentNullException(nameof(refreshTokenDto));
-            }
+            var refreshToken = await VerifyAndGenerateTokenAsync(refreshTokenDto);
 
-            var result = await VerifyAndGenerateTokenAsync(refreshTokenDto);
-
-            return result;
+            return refreshToken;
         }
 
-        private async Task<AuthResultDto> VerifyAndGenerateTokenAsync(RefreshTokenDto refreshTokenDto)
+        public async Task SignOut() //????
+        {
+            await _signInManager.SignOutAsync();
+        }
+
+        public async Task<AuthResultDto> VerifyAndGenerateTokenAsync(RefreshTokenDto refreshTokenDto)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var storedToken = await _context.RefreshTokens.FirstOrDefaultAsync(x => x.Token == refreshTokenDto.RefreshToken);
-            var user = await _userManager.FindByIdAsync(storedToken.UserId);
+            var storedToken = await _unitOfWork.AuthRepository.GetRefreshTokenAsync(refreshTokenDto.RefreshToken);
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == storedToken.UserId);
 
             try
             {
@@ -156,17 +121,12 @@ namespace GameStore.Services
             }
         }
 
-        public async Task SignOut() //????
-        {
-            await _signInManager.SignOutAsync(); 
-        }
-
-        private async Task<AuthResultDto> GenerateJWTTokenAsync(UserModel user, RefreshTokenModel rToken)
+        public async Task<AuthResultDto> GenerateJWTTokenAsync(UserModel user, RefreshTokenModel rToken)
         {
             var authClaims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
@@ -203,8 +163,9 @@ namespace GameStore.Services
                 DateExpire = DateTime.UtcNow.AddMonths(6),
                 Token = Guid.NewGuid().ToString() + "-" + Guid.NewGuid().ToString()
             };
-            await _context.RefreshTokens.AddAsync(refreshToken);
-            await _context.SaveChangesAsync();
+
+            await _unitOfWork.AuthRepository.AddRefreshTokenAsync(refreshToken);
+            await _unitOfWork.Complete();
 
             var response = new AuthResultDto()
             {

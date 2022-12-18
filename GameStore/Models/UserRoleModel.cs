@@ -2,7 +2,7 @@
 
 namespace GameStore.Models
 {
-    public class UserRoleModel : IdentityRole/*<int>*/
+    public class UserRoleModel : IdentityRole<int>
     {
     }
 }

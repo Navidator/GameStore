@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GameStore.Models
 {
-    public class UserModel : IdentityUser/*<int>*/
+    public class UserModel : IdentityUser<int>
     {
         [Required]
         public string FirstName { get; set; }
@@ -21,5 +22,7 @@ namespace GameStore.Models
         public string Country { get; set; }
 
         public int ZipCode { get; set; }
+
+        public IList<CommentModel> Comments { get; set; } = new List<CommentModel>();
     }
 }

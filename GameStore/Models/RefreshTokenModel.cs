@@ -19,7 +19,7 @@ namespace GameStore.Models
 
         public DateTime DateExpire { get; set; }
 
-        public string UserId { get; set; }
+        public int UserId { get; set; }
 
         [ForeignKey("UserModel")]
         public UserModel User { get; set; }

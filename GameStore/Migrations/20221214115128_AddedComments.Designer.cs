@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameStore.Migrations
 {
     [DbContext(typeof(GameStoreContext))]
-    [Migration("20221212083547_AddedRefreshToken")]
-    partial class AddedRefreshToken
+    [Migration("20221214115128_AddedComments")]
+    partial class AddedComments
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,25 +23,29 @@ namespace GameStore.Migrations
 
             modelBuilder.Entity("GameStore.Models.CommentModel", b =>
                 {
-                    b.Property<int>("CommentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CommenText")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("CommentId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CommentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("GameId")
-                        .HasColumnType("int");
+                    b.Property<string>("CommentText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(600)")
+                        .HasMaxLength(600);
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ParentId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("CommentId");
+
+                    b.HasIndex("ParentId");
 
                     b.ToTable("Comments");
                 });
@@ -59,6 +63,28 @@ namespace GameStore.Migrations
                     b.HasKey("CurrencyId");
 
                     b.ToTable("Currency");
+                });
+
+            modelBuilder.Entity("GameStore.Models.GameAndCommentModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CommentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommentId");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("GameAndComments");
                 });
 
             modelBuilder.Entity("GameStore.Models.GameModel", b =>
@@ -247,6 +273,28 @@ namespace GameStore.Migrations
                     b.HasIndex("UserModel");
 
                     b.ToTable("RefreshTokens");
+                });
+
+            modelBuilder.Entity("GameStore.Models.UserAndCommentModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CommentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserAndComments");
                 });
 
             modelBuilder.Entity("GameStore.Models.UserModel", b =>
@@ -468,6 +516,27 @@ namespace GameStore.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("GameStore.Models.CommentModel", b =>
+                {
+                    b.HasOne("GameStore.Models.CommentModel", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("GameStore.Models.GameAndCommentModel", b =>
+                {
+                    b.HasOne("GameStore.Models.CommentModel", "Comment")
+                        .WithMany("GameAndComment")
+                        .HasForeignKey("CommentId");
+
+                    b.HasOne("GameStore.Models.GameModel", "Game")
+                        .WithMany("GameAndComments")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("GameStore.Models.GamesAndGenresModel", b =>
                 {
                     b.HasOne("GameStore.Models.GameModel", "Game")
@@ -496,6 +565,17 @@ namespace GameStore.Migrations
                     b.HasOne("GameStore.Models.UserModel", "User")
                         .WithMany()
                         .HasForeignKey("UserModel");
+                });
+
+            modelBuilder.Entity("GameStore.Models.UserAndCommentModel", b =>
+                {
+                    b.HasOne("GameStore.Models.CommentModel", "Comment")
+                        .WithMany("UserAndComment")
+                        .HasForeignKey("CommentId");
+
+                    b.HasOne("GameStore.Models.UserModel", "User")
+                        .WithMany("UserAndComment")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

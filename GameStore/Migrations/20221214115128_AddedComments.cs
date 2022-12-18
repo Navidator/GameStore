@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GameStore.Migrations
 {
-    public partial class ChangedIdentityFromINTToNVARCHAR : Migration
+    public partial class AddedComments : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -42,6 +42,7 @@ namespace GameStore.Migrations
                     AccessFailedCount = table.Column<int>(nullable: false),
                     FirstName = table.Column<string>(nullable: false),
                     LastName = table.Column<string>(nullable: false),
+                    AvatarUrl = table.Column<string>(nullable: true),
                     GenderId = table.Column<int>(nullable: false),
                     City = table.Column<string>(nullable: true),
                     Country = table.Column<string>(nullable: true),
@@ -56,16 +57,22 @@ namespace GameStore.Migrations
                 name: "Comments",
                 columns: table => new
                 {
-                    CommentId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CommenText = table.Column<string>(nullable: false),
+                    CommentId = table.Column<string>(nullable: false),
+                    CommentText = table.Column<string>(maxLength: 600, nullable: false),
                     CommentDate = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
-                    GameId = table.Column<int>(nullable: false)
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeletedAt = table.Column<DateTime>(nullable: false),
+                    ParentId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Comments", x => x.CommentId);
+                    table.ForeignKey(
+                        name: "FK_Comments_Comments_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "Comments",
+                        principalColumn: "CommentId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -284,6 +291,83 @@ namespace GameStore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RefreshTokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Token = table.Column<string>(nullable: true),
+                    JwtId = table.Column<string>(nullable: true),
+                    IsRevoked = table.Column<bool>(nullable: false),
+                    DateAdded = table.Column<DateTime>(nullable: false),
+                    DateExpire = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
+                    UserModel = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RefreshTokens_AspNetUsers_UserModel",
+                        column: x => x.UserModel,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserAndComments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(nullable: true),
+                    CommentId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserAndComments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserAndComments_Comments_CommentId",
+                        column: x => x.CommentId,
+                        principalTable: "Comments",
+                        principalColumn: "CommentId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserAndComments_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GameAndComments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GameId = table.Column<int>(nullable: false),
+                    CommentId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameAndComments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GameAndComments_Comments_CommentId",
+                        column: x => x.CommentId,
+                        principalTable: "Comments",
+                        principalColumn: "CommentId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_GameAndComments_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
+                        principalColumn: "GameId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "GamesAndGenres",
                 columns: table => new
                 {
@@ -349,6 +433,21 @@ namespace GameStore.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Comments_ParentId",
+                table: "Comments",
+                column: "ParentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GameAndComments_CommentId",
+                table: "GameAndComments",
+                column: "CommentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GameAndComments_GameId",
+                table: "GameAndComments",
+                column: "GameId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GamesAndGenres_GameId",
                 table: "GamesAndGenres",
                 column: "GameId");
@@ -362,6 +461,21 @@ namespace GameStore.Migrations
                 name: "IX_Genres_ParentId",
                 table: "Genres",
                 column: "ParentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RefreshTokens_UserModel",
+                table: "RefreshTokens",
+                column: "UserModel");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserAndComments_CommentId",
+                table: "UserAndComments",
+                column: "CommentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserAndComments_UserId",
+                table: "UserAndComments",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -382,10 +496,10 @@ namespace GameStore.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Comments");
+                name: "Currency");
 
             migrationBuilder.DropTable(
-                name: "Currency");
+                name: "GameAndComments");
 
             migrationBuilder.DropTable(
                 name: "GamesAndGenres");
@@ -403,16 +517,25 @@ namespace GameStore.Migrations
                 name: "PaymentTypes");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "RefreshTokens");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "UserAndComments");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Games");
 
             migrationBuilder.DropTable(
                 name: "Genres");
+
+            migrationBuilder.DropTable(
+                name: "Comments");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

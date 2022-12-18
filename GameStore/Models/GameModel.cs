@@ -24,5 +24,7 @@ namespace GameStore.Models
         public string Publisher { get; set; }
 
         public IList<GamesAndGenresModel> GameAndGenre { get; set; } = new List<GamesAndGenresModel>();
+
+        public IList<CommentModel> Comments { get; set; } = new List<CommentModel>();
     }
 }
