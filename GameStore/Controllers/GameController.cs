@@ -1,6 +1,6 @@
 ﻿using GameStore.CustomExceptions;
 using GameStore.Dtos;
-using GameStore.Services;
+using GameStore.Services.Service_Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -10,8 +10,8 @@ namespace GameStore.Controllers
     [Route("/[controller]")]
     public class GameController : Controller
     {
-        private readonly GameService _gameService;
-        public GameController(GameService gamesService)
+        private readonly IGameService _gameService;
+        public GameController(IGameService gamesService)
         {
             _gameService = gamesService;
         }

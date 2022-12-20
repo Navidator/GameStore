@@ -112,13 +112,15 @@ namespace GameStore
             });
 
             //Add services
-            services.AddScoped<IGameService, GameService>();
-            services.AddScoped<IGameRepository, GameRepository>();
+            services.AddScoped<IGameService, GameService>(); 
             services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<GenresService>();
             services.AddScoped<SearchService>();
             
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             services.AddScoped<IAuthService, AuthenticationService>();
+            services.AddScoped<IGameRepository, GameRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
         }
