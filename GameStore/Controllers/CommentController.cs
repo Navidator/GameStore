@@ -24,7 +24,7 @@ namespace GameStore.Controllers
             return Ok(comments);
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost, Route("AddComment")]
         public async Task<IActionResult> AddCommentToGame([FromBody] AddCommentDto comment)
         {
@@ -33,7 +33,7 @@ namespace GameStore.Controllers
             return Ok(result);
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost, Route("EditComment")]
         public async Task<IActionResult> EditComment([FromBody] EditCommentDto editComment)
         {
@@ -42,7 +42,7 @@ namespace GameStore.Controllers
             return Ok(result);
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpDelete, Route("RemoveComment/{id}")]
         public async Task<IActionResult> RemoveComment(int id)
         {
@@ -51,7 +51,7 @@ namespace GameStore.Controllers
             return Ok(result);
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost, Route("HideComment/{id}")]
         public async Task<IActionResult> HideComment(int id)
         {

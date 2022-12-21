@@ -8,9 +8,7 @@ namespace GameStore.DataBase.Repository
     {
         Task<UserModel> Login(LoginUserDto loginUserDto);
         Task<UserModel> Register(UserModel registerUser);
-        //Task<AuthResultDto> Login(LoginUserDto loginUserDto);
         Task<UserModel> EditUser(EditUserDto editUserDto);
-        //Task<AuthResultDto> RefreshToken(RefreshTokenDto refreshTokenDto);
         Task AddRefreshTokenAsync(RefreshTokenModel refreshToken);
         Task<RefreshTokenModel> GetRefreshTokenAsync(string token);
     }

@@ -22,14 +22,6 @@ namespace GameStore.Models
 
         public DateTime DeletedAt { get; set; }
 
-        //[ForeignKey("UserModel")]
-        //public string UserId { get; set; }
-
-        //[ForeignKey("GameModel")]
-        //public int GameId { get; set; }
-
-
-
 #nullable enable
         [ForeignKey("CommentModel")]
         public int? ParentId { get; set; }

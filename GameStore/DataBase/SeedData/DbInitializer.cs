@@ -11,7 +11,7 @@ namespace GameStore.DataBase.SeedData
         {
             context.Database.EnsureCreated();
 
-            // Look for any students.
+            // Look for any games.
             if (context.Games.Count() > 0)
             {
                 return;   // DB has been seeded

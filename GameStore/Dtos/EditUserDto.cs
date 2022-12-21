@@ -4,8 +4,6 @@ namespace GameStore.Dtos
 {
     public class EditUserDto
     {
-        //public string UserId { get; set; }
-
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
@@ -16,8 +14,6 @@ namespace GameStore.Dtos
         public string UserName { get; set; }
 
         public string AvatarUrl { get; set; }
-
-        //public int GenderId { get; set; }
 
         public string City { get; set; }
 

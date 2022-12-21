@@ -91,11 +91,6 @@ namespace GameStore.Services
             return refreshToken;
         }
 
-        public async Task SignOut() //????
-        {
-            await _signInManager.SignOutAsync();
-        }
-
         public async Task<AuthResultDto> VerifyAndGenerateTokenAsync(RefreshTokenDto refreshTokenDto)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
