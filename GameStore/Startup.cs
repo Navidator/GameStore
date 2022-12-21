@@ -116,6 +116,7 @@ namespace GameStore
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<GenresService>();
             services.AddScoped<SearchService>();
+            services.AddScoped<OrderService>();
             
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

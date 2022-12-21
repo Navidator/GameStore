@@ -12,20 +12,16 @@ namespace GameStore.Models
         [ForeignKey("UserModel")]
         public int UserId { get; set; }
 
+#nullable enable
         [ForeignKey("GameModel")]
         public int GameId { get; set; }
-
-        [ForeignKey("OrderedGamesModel")]
-        public int ParentOrderId { get; set; }
-
-        //public double Price { get; set; }
-
-        [ForeignKey("CurrencyModel")]
-        public int CurrencyId { get; set; }
-
-        [ForeignKey("PaymentTypeModel")]
-        public int PaymentTypeId { get; set; }
+#nullable disable
 
         public string OrderComment { get; set; }
+
+        [ForeignKey("CartModel")]
+        public int? ParentId { get; set; }
+
+        public CartModel Parent { get; set; }
     }
 }
