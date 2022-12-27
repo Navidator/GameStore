@@ -1,32 +1,19 @@
-﻿using GameStore.CustomExceptions;
-using GameStore.Dtos;
+﻿using GameStore.Dtos;
 using GameStore.Models;
-using Microsoft.AspNetCore.Identity;
-using System.Text;
-using System.Threading.Tasks;
-using System;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using System.IdentityModel.Tokens.Jwt;
-using System.Collections.Generic;
-using System.Security.Claims;
-using GameStore.Services.Service_Interfaces;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GameStore.DataBase.Repository
 {
     public class AuthRepository : IAuthRepository
     {
-        private readonly UserManager<UserModel> _userManager;
-        private readonly SignInManager<UserModel> _signInManager;
         private readonly GameStoreContext _context;
 
-        public AuthRepository(UserManager<UserModel> userManager, GameStoreContext context, SignInManager<UserModel> signInManager)
+        public AuthRepository(GameStoreContext context)
         {
-            _userManager = userManager;
             _context = context;
-            _signInManager = signInManager;
         }
 
         public async Task<UserModel> Login (LoginUserDto loginUserDto)

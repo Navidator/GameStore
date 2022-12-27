@@ -1,5 +1,4 @@
 ﻿using GameStore.CustomExceptions;
-using GameStore.DataBase.UnitOfWork;
 using GameStore.Dtos;
 using GameStore.Models;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +20,7 @@ namespace GameStore.DataBase.Repository
         }
         public Task<List<GameModel>> GetAllGames()
         {
-            return _context.Games.ToListAsync();
+            return _context.Games.Include(x => x.GameAndGenre).ThenInclude(x => x.Genre).ToListAsync();
         }
 
         public async Task<GameModel> GetGameById(int id)
@@ -79,7 +78,7 @@ namespace GameStore.DataBase.Repository
 
             foreach (var x in editedGame.Genres)
             {
-                if (x.EditType == EditTypeValue.Add)
+                if (x.ActionType == ActionTypeValue.Add)
                 {
                     if (!gameToUpdate.GameAndGenre.Any(g => g.GenreId == x.GenreId))
                     {
@@ -87,14 +86,14 @@ namespace GameStore.DataBase.Repository
                     }
                     else
                     {
-                        var genre = _context.Genres.Where(x => x.GenreId == x.GenreId).FirstOrDefault();
+                        var genre = await _context.Genres.Where(x => x.GenreId == x.GenreId).FirstOrDefaultAsync();
 
                         throw new AlreadyExistException($"{genre.GenreName} is already assigned to the game");
                     }     
                 }
-                else if (x.EditType == EditTypeValue.Remove)
+                else if (x.ActionType == ActionTypeValue.Remove)
                 {
-                    var y = _context.GamesAndGenres.Where(game => game.GameId == gameToUpdate.GameId && game.GenreId == x.GenreId).FirstOrDefault();
+                    var y = await _context.GamesAndGenres.Where(game => game.GameId == gameToUpdate.GameId && game.GenreId == x.GenreId).FirstOrDefaultAsync();
 
                     gameToUpdate.GameAndGenre.Remove(y);
                 }

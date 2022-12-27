@@ -24,11 +24,11 @@ namespace GameStore.Dtos
 
     public class EditGenre
     {
-        public EditTypeValue EditType { get; set; }
+        public ActionTypeValue ActionType { get; set; }
         public int GenreId { get; set; }
     }
 
-    public enum EditTypeValue
+    public enum ActionTypeValue
     {
         Add, Remove
     }

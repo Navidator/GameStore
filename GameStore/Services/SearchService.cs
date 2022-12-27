@@ -22,11 +22,11 @@ namespace GameStore.Services
             {
                 return await _context.Games.ToListAsync();
             }
-
-            return await SearchByName(searchValue);
+            else
+                return await SearchByName(searchValue);
         }
 
-        public async Task<List<GameModel>> SearchByName(string searchValue)
+        private async Task<List<GameModel>> SearchByName(string searchValue)
         {
             if (string.IsNullOrEmpty(searchValue))
             {
@@ -38,9 +38,9 @@ namespace GameStore.Services
 
         public async Task<List<GameModel>> FilterByGenre(int genreId)
         {
-            var retreivedGamesByCategodyId = await _context.GamesAndGenres.Where(genre => genre.GenreId.Equals(genreId)).ToListAsync();
+            var retreivedGamesByCategodyId = await _context.GamesAndGenres.Where(genre => genre.GenreId.Equals(genreId)).Select(x => x.Game).ToListAsync();
 
-            return null;
+            return retreivedGamesByCategodyId;
         }
     }
 }
