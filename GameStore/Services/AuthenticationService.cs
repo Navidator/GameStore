@@ -160,7 +160,6 @@ namespace GameStore.Services
             };
 
             await _unitOfWork.AuthRepository.AddRefreshTokenAsync(refreshToken);
-            await _unitOfWork.Complete();
 
             var response = new AuthResultDto()
             {

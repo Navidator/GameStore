@@ -54,7 +54,12 @@ namespace GameStore.DataBase.Repository
                 return null;
         }
 
-        public async Task AddRefreshTokenAsync(RefreshTokenModel refreshToken) => await _context.RefreshTokens.AddAsync(refreshToken);
+        public async Task AddRefreshTokenAsync(RefreshTokenModel refreshToken) 
+        {
+            await _context.RefreshTokens.AddAsync(refreshToken);
+            await _context.SaveChangesAsync();
+        }
+        
 
         public async Task<RefreshTokenModel> GetRefreshTokenAsync(string token) => await _context.RefreshTokens.FirstOrDefaultAsync(x => x.Token == token);
     }
