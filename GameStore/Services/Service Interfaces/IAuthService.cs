@@ -10,7 +10,6 @@ namespace GameStore.Services.Service_Interfaces
         Task<AuthResultDto> Login(LoginUserDto loginUserDto);
         Task<UserModel> EditUser(EditUserDto editUserDto);
         Task<AuthResultDto> RequestNewToken(RefreshTokenDto refreshTokenDto);
-        Task SignOut();
         Task<AuthResultDto> VerifyAndGenerateTokenAsync(RefreshTokenDto refreshTokenDto);
         Task<AuthResultDto> GenerateJWTTokenAsync(UserModel user, RefreshTokenModel rToken);
     }

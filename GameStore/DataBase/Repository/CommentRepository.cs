@@ -27,6 +27,8 @@ namespace GameStore.Data.Repositories.GameCommentRepository
 
             var entity = await _context.Comments.FirstOrDefaultAsync(x => x.CommentId == comment.CommentId);
 
+            await _context.SaveChangesAsync();
+
             return entity;
         }
 
@@ -41,6 +43,8 @@ namespace GameStore.Data.Repositories.GameCommentRepository
                 throw new InvalidOperationException("The comment is already deleted");
 
             commentToRemove.IsDeleted = true;
+
+            await _context.SaveChangesAsync();
 
             return commentId;
         }
@@ -70,6 +74,8 @@ namespace GameStore.Data.Repositories.GameCommentRepository
                 throw new InvalidOperationException("The comment is deleted");
 
             commentToHide.IsHidden = !commentToHide.IsHidden;
+
+            await _context.SaveChangesAsync();
 
             return commentId;
         }

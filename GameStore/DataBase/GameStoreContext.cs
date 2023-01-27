@@ -10,7 +10,7 @@ namespace GameStore.DataBase
         {
         }
 
-        public DbSet<OrderedGamesModel> OrderedGames { get; set; }
+        public DbSet<CartModel> Cart { get; set; }
         public DbSet<CommentModel> Comments { get; set; }
         public DbSet<CurrencyModel> Currency { get; set; }
         public DbSet<GameModel> Games { get; set; }

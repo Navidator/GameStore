@@ -23,12 +23,7 @@ namespace GameStore.Controllers
         {
             try
             {
-                if(string.IsNullOrEmpty(search.SearchValue))
-                {
-                    return new OkObjectResult(await _searchService.Search(""));
-                }
-                else
-                    return new OkObjectResult(await _searchService.Search(search.SearchValue.ToString()));
+                return new OkObjectResult(await _searchService.Search(search.SearchValue.ToString()));
             }
             catch (System.Exception e)
             {

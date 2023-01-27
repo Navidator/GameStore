@@ -26,11 +26,6 @@ namespace GameStore.Services
         {
             var result = await _unitOfWork.CommentRepository.DeleteComment(commentId);
 
-            var commitResult = await _unitOfWork.Complete();
-
-            if (commitResult <= 0)
-                throw new Exception("Operation was not commited");
-
             return result;
         }
 
@@ -42,11 +37,6 @@ namespace GameStore.Services
                 throw new InvalidOperationException("The Comment is not found!");
 
             entity.CommentText = editComment.CommentText;
-
-            var commitResult = await _unitOfWork.Complete();
-
-            if (commitResult <= 0)
-                throw new Exception("Operation was not commited");
 
             var dto = new CommentDto(entity);
 
@@ -64,11 +54,6 @@ namespace GameStore.Services
         {
             var result = await _unitOfWork.CommentRepository.HideComment(commentId);
 
-            var commitResult = await _unitOfWork.Complete();
-
-            if (commitResult <= 0)
-                throw new Exception("Operation was not commited");
-
             return result;
         }
 
@@ -79,15 +64,10 @@ namespace GameStore.Services
                 UserId = addComment.UserId,
                 GameId = addComment.GameId,
                 CommentText = addComment.CommentText,
-                ParentId = isReply ? addComment.ParentId : null //tu 0 iqneba gaasxavs da dasamatebelia
+                ParentId = isReply ? addComment.ParentId : null
             };
 
             var result = await _unitOfWork.CommentRepository.AddComment(model);
-
-            var commitResult = await _unitOfWork.Complete();
-
-            if (commitResult <= 0)
-                throw new Exception("Operation was not commited");
 
             var dto = new CommentDto(result);
 

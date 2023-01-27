@@ -64,13 +64,5 @@ namespace GameStore.Controllers
             }
             return new OkObjectResult(await _authenticationService.RequestNewToken(refreshTokenDto));
         }
-
-        [Authorize]
-        [HttpGet, Route("SignOut")]
-        public async Task<IActionResult> SignOut()
-        {
-            await _authenticationService.SignOut();
-            return NoContent();
-        }
     }
 }
